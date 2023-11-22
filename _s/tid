@@ -1,0 +1,32 @@
+#!/bin/sh
+export directory=$(dirname $(realpath /usr/local/bin/tid))
+source $directory/functions.sh
+
+while test "$1" != --; do
+  hello
+  case $1 in
+  s | serve)
+    pixlet serve ./applets/${2}.star
+    printf "Ready: http://localhost:8080"
+    break
+    ;;
+  --)
+    printf "Build help command"
+    break
+    ;;
+  *)
+    projectPath=$(realpath ${directory}/..)
+    if [ $(pwd) = ${projectPath} ]; then
+      printf "Unexpected args — you done goofed!" ]
+      echo
+    else
+      printf "Moving to project directory"
+      cd ${directory}/../
+      $SHELL
+    fi
+    break
+    ;;
+  esac
+done
+err=$?
+[[ $err != 0 ]] && exit $err
